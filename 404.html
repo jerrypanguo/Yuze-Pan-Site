@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script>
+      (function() {
+        const now = new Date();
+        const hour = now.getHours();
+        const minute = now.getMinutes();
+        const isDayTime = (hour > 6 || (hour === 6 && minute >= 30)) && hour < 18;
+        const theme = isDayTime ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+    <title>404 - Page Not Found | Yuze Pan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="static/images/favicon.ico" type="image/x-icon">
+    <style>
+        :root {
+            --primary-color: #000;
+            --secondary-color: #fff;
+            --accent-color: #e5d5c0;
+            --divider-color-strong: rgba(255, 255, 255, 0.6);
+            --divider-color-weak: rgba(255, 255, 255, 0.2);
+            --link-bg: rgba(255, 255, 255, 0.05);
+            --link-bg-hover: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(0, 0, 0, 0.95);
+            --nav-border: rgba(255, 255, 255, 0.05);
+            --nav-item-hover: rgba(255, 255, 255, 0.7);
+            --player-bg: rgba(20, 20, 20, 0.95);
+            --transition-speed: 0.3s;
+            --font-main: "Cormorant Garamond", serif;
+            --button-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --button-shadow-hover: 0 10px 40px rgba(0, 0, 0, 0.2);
+            --button-shadow-light: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --button-shadow-hover-light: 0 10px 40px rgba(0, 0, 0, 0.15);
+            --button-bg: rgba(18, 18, 18, 0.2);
+            --button-bg-hover: rgba(18, 18, 18, 0.8);
+            --button-bg-light: rgba(245, 244, 237, 0.2);
+            --button-bg-hover-light: rgba(245, 244, 237, 0.8);
+        }
+
+        /* 为浅色主题定义变量 */
+        html[data-theme='light'] {
+            --primary-color: #F5F4ED;
+            --secondary-color: #000000;
+            --accent-color: #A0522D;
+            --divider-color-strong: rgba(0, 0, 0, 0.6);
+            --divider-color-weak: rgba(0, 0, 0, 0.2);
+            --link-bg: rgba(0, 0, 0, 0.05);
+            --link-bg-hover: rgba(0, 0, 0, 0.1);
+            --nav-bg: rgba(245, 244, 237, 0.9);
+            --nav-border: rgba(0, 0, 0, 0.1);
+            --nav-item-hover: rgba(0, 0, 0, 0.7);
+            --player-bg: rgba(245, 244, 237, 0.9);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--primary-color);
+            color: var(--secondary-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .error-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            animation: fadeIn 1s ease;
+        }
+
+        .error-title {
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+        }
+
+        .error-number {
+            font-size: 7.5rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+            letter-spacing: 5px;
+            line-height: 1;
+        }
+
+        .error-message {
+            font-size: 1.35rem;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .error-divider {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 500px;
+            margin: 3rem auto;
+            height: 20px;
+        }
+
+        .error-divider::before,
+        .error-divider::after {
+            content: '';
+            height: 1px;
+            background: linear-gradient(
+                to var(--direction, right),
+                var(--divider-color-strong) 0%,
+                var(--divider-color-weak) 80%,
+                rgba(0, 0, 0, 0) 100%
+            );
+            flex-grow: 1;
+            max-width: 220px;
+        }
+
+        .error-divider::before {
+            --direction: right;
+        }
+
+        .error-divider::after {
+            --direction: left;
+        }
+
+        .error-divider span {
+            display: inline-block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: var(--divider-color-strong);
+            margin: 0 15px;
+        }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0.8rem;
+            margin-bottom: 1.8rem;
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-size: 1.125rem;
+            letter-spacing: 2px;
+            padding: 0.8rem 2.5rem;
+            border-radius: 8px;
+            border: none;
+            background: var(--button-bg);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            box-shadow: none;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
+                      background-color 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                      box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                      letter-spacing 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, background-color, box-shadow;
+        }
+
+        html[data-theme='light'] .back-home {
+            background: var(--button-bg-light);
+        }
+
+        /* 闪光效果容器 */
+        .back-home::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                rgba(255, 255, 255, 0) 40%,
+                rgba(255, 255, 255, 0.5) 50%,
+                rgba(255, 255, 255, 0) 60%
+            );
+            background-size: 200% 100%;
+            animation: shineButton 3s linear infinite;
+        }
+
+        @keyframes shineButton {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .back-home:hover {
+            transform: translateY(-2px) scale(1.03);
+            background: var(--button-bg-hover);
+            box-shadow: var(--button-shadow-hover);
+            letter-spacing: 2.5px;
+        }
+
+        html[data-theme='light'] .back-home:hover {
+            background: var(--button-bg-hover-light);
+            box-shadow: var(--button-shadow-hover-light);
+        }
+
+        .back-home:active {
+            transform: translateY(1px) scale(0.98);
+            box-shadow: var(--button-shadow);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* 社交链接 */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--link-bg);
+            transition: transform var(--transition-speed) ease, 
+                        background var(--transition-speed) ease;
+        }
+
+        .social-link:hover {
+            transform: scale(1.1);
+            background: var(--link-bg-hover);
+        }
+
+        .social-link svg {
+            width: 22px;
+            height: 22px;
+            fill: var(--secondary-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* 导航栏 */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 3rem;
+            z-index: 1000;
+            border-top: 1px solid var(--nav-border);
+            transition: all 0.4s ease;
+        }
+
+        .nav-logo {
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+            transition: opacity var(--transition-speed) ease;
+            white-space: nowrap;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .nav-item {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            transition: color var(--transition-speed) ease;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: var(--nav-item-hover);
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--secondary-color);
+            transition: width var(--transition-speed) ease;
+        }
+
+        .nav-item:hover::after {
+            width: 100%;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .error-title {
+                font-size: 2.25rem;
+            }
+            
+            .error-number {
+                font-size: 6rem;
+            }
+            
+            .error-message {
+                font-size: 1.125rem;
+            }
+            
+            .nav-bar {
+                padding: 0 1.5rem;
+            }
+            
+            .nav-logo {
+                font-size: 1.5rem;
+            }
+            
+            .nav-menu {
+                gap: 1.5rem;
+            }
+            
+            .social-links {
+                gap: 3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .error-title {
+                font-size: 1.875rem;
+            }
+            
+            .error-number {
+                font-size: 4.5rem;
+            }
+            
+            .error-message {
+                font-size: 0.9rem;
+            }
+            
+            .back-home {
+                font-size: 0.9rem;
+                padding: 0.6rem 1.5rem;
+            }
+            
+            .nav-bar {
+                padding: 0 1rem;
+                height: 50px;
+            }
+            
+            .nav-logo {
+                font-size: 1.2rem;
+            }
+            
+            .nav-menu {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .nav-item {
+                font-size: 0.9rem;
+            }
+            
+            .social-links {
+                gap: 2rem;
+            }
+            
+            .social-link {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .social-link svg {
+                width: 18px;
+                height: 18px;
+            }
+        }
+    </style>
+</head>
+<body class="page-transition">
+    <div class="error-container">
+        <h1 class="error-title">Page Not Found</h1>
+        <div class="error-number">404</div>
+        <p class="error-message">Sorry, the page you are looking for doesn't exist or has been moved.</p>
+        
+        <a href="index.html" class="back-home">BACK TO HOME</a>
+        
+        <div class="error-divider"><span></span></div>
+
+        <div class="social-links">
+            <a href="https://www.instagram.com/yuze_guitarist/" target="_blank" class="social-link" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                </svg>
+            </a>
+            <a href="https://www.youtube.com/@jerry-yuze731" target="_blank" class="social-link" aria-label="YouTube">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <div class="nav-logo">Yuze Pan</div>
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item">HOME</a>
+            <a href="index.html#profile" class="nav-item">PROFILE</a>
+            <a href="gallery.html" class="nav-item">GALLERY</a>
+            <a href="video.html" class="nav-item">VIDEO</a>
+            <a href="contact.html" class="nav-item">CONTACT</a>
+        </nav>
+    </div>
+    
+    <script>
+        // 平滑过渡效果
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                document.body.classList.remove('page-transition');
+            }, 100);
+        });
+        
+        // 自动设置主题函数
+        function autoSetTheme() {
+            const now = new Date();
+            const hour = now.getHours();
+            const minute = now.getMinutes();
+            const isDayTime = (hour > 6 || (hour === 6 && minute >= 30)) && hour < 18;
+            
+            if (isDayTime) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        }
+        
+        // 页面加载时自动设置主题
+        // autoSetTheme();  // 已由内联脚本完成
+        
+        // 每小时检查一次主题 (在日出日落时间附近自动更新)
+        setInterval(autoSetTheme, 3600000);
+    </script>
+</body>
+</html> 

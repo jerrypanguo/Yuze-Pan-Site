@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script>
+      (function() {
+        const now = new Date();
+        const hour = now.getHours();
+        const minute = now.getMinutes();
+        const isDayTime = (hour > 6 || (hour === 6 && minute >= 30)) && hour < 18;
+        const theme = isDayTime ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+        // console.log('Inline script set theme:', theme); // 调试用
+      })();
+    </script>
+    <title>Video - Yuze Pan | 古典吉他演奏家</title>
+    <link href="static/css/main.css" rel="stylesheet">
+    <link href="static/css/protection.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="static/images/favicon.ico" type="image/x-icon">
+    <script src="static/js/theme-switcher.js" defer></script>
+    <style>
+        /* 移除播放器栏样式覆盖,让 CSS 变量生效 */
+        /* .player-bar {
+            background: #121212 !important; 
+            backdrop-filter: none !important; 
+            -webkit-backdrop-filter: none !important; 
+        } */
+        
+        /* 增加Performance标题下边距 */
+        .video-title {
+            margin-bottom: 3rem;
+        }
+        
+        /* YouTube视频容器样式 */
+        .video-wrapper {
+            position: relative;
+            width: 560px; /* 固定宽度560px */
+            height: 315px; /* 标准高度315px */
+            margin: 0 auto;
+            overflow: hidden;
+            background: #000;
+            border-radius: 4px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        
+        /* 视频网格布局 */
+        .videos-grid {
+            display: grid;
+            grid-template-columns: 560px 560px; /* 固定列宽 */
+            grid-template-rows: 315px 315px; /* 固定行高 */
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 2rem auto 0;
+            padding: 0 2rem;
+            align-items: start;
+            justify-content: center;
+        }
+        
+        /* 主视频容器 */
+        .main-video {
+            grid-column: 1;
+            grid-row: 1 / 3; /* 占据两行空间 */
+        }
+        
+        .main-video .video-wrapper {
+            width: 560px;
+            height: calc(630px + 2.5rem); /* 两个视频高度 + 间距 */
+            max-width: none;
+        }
+        
+        /* 第二个视频容器 */
+        .second-video {
+            grid-column: 2;
+            grid-row: 1;
+        }
+        
+        /* 更多视频按钮容器 */
+        .more-videos-button {
+            grid-column: 2;
+            grid-row: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--player-bg);
+            border-radius: 4px;
+            width: 560px;
+            height: 315px; /* 与第二个视频同样高度 */
+            text-decoration: none;
+            color: var(--secondary-color);
+            transition: all 0.3s ease;
+            border: 1px solid var(--nav-border);
+            cursor: pointer;
+            padding: 1.5rem;
+            text-align: center;
+            margin: 0 auto;
+        }
+        
+        .more-videos-button:hover {
+            background: var(--link-bg-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .more-videos-text {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+            font-weight: 400;
+        }
+        
+        .more-videos-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        
+        .more-videos-button:hover .more-videos-link {
+            opacity: 1;
+        }
+        
+        .arrow-icon {
+            font-size: 0.8rem;
+        }
+        
+        /* 响应式布局 */
+        @media (max-width: 1200px) {
+            .videos-grid {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto;
+                max-width: 100%;
+                padding: 0 1rem;
+            }
+            
+            .video-wrapper {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 560/315;
+                max-width: 560px;
+            }
+            
+            .main-video .video-wrapper {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 560/630; /* 相当于两个视频的高度比例 */
+                max-width: 560px;
+            }
+            
+            .more-videos-button {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 560/315;
+                max-width: 560px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .videos-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                gap: 2.5rem;
+                padding: 0 1rem;
+                margin-top: 2rem;
+            }
+            
+            .main-video {
+                grid-column: 1;
+                grid-row: 1;
+            }
+            
+            .main-video .video-wrapper {
+                aspect-ratio: 560/315; /* 移动端恢复标准比例 */
+            }
+            
+            .second-video {
+                grid-column: 1;
+                grid-row: 2;
+            }
+            
+            .more-videos-button {
+                grid-column: 1;
+                grid-row: 3;
+                max-width: 100%;
+                margin: 0 auto;
+            }
+            
+            .video-wrapper {
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .videos-grid {
+                gap: 2rem;
+                padding: 0 0.5rem;
+                margin-top: 1.5rem;
+            }
+            
+            .video-title {
+                margin-bottom: 2rem;
+            }
+            
+            .more-videos-text {
+                font-size: 0.95rem;
+            }
+            
+            .more-videos-link {
+                font-size: 0.85rem;
+            }
+        }
+        
+        /* 链接阻止层样式 */
+        .link-blocker-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .link-blocker-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .link-blocker-message {
+            background: #fff;
+            color: #000;
+            padding: 20px 30px;
+            border-radius: 4px;
+            max-width: 90%;
+            text-align: center;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: messageAppear 0.3s forwards;
+        }
+        
+        @keyframes messageAppear {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        /* 防止右键菜单 */
+        .video-wrapper {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        
+        /* 防止视频互动区域移动 */
+        .video-interaction-blocker {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            /* 允许点击通过到视频区域,但阻止拖拽等操作 */
+            pointer-events: none;
+        }
+        
+        /* 视频结束保护层样式 */
+        .video-end-protection-overlay {
+            background: transparent;
+            pointer-events: auto;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="video-page page-transition">
+    
+    <section class="video-section">
+        <div class="video-container">
+            <h1 class="video-title">Performance</h1>
+            
+            <div class="videos-grid">
+                <div class="main-video">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube-nocookie.com/embed/7NrO3vBjsos?rel=0&showinfo=0&modestbranding=1&controls=1&disablekb=1&fs=1&iv_load_policy=3&hl=en&cc_load_policy=0&color=white&si=ySLLulDdZ9ryJWZO" title="Yuze Pan - Classical Guitar Performance" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        <div class="video-interaction-blocker"></div>
+                    </div>
+                </div>
+                <div class="second-video">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube-nocookie.com/embed/zRYXrO8dtoo?si=xcKzDoC2jurBAwLp" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        <div class="video-interaction-blocker"></div>
+                    </div>
+                </div>
+                <a href="https://www.youtube.com/@jerry-yuze731" target="_blank" rel="noopener noreferrer" class="more-videos-button">
+                    <div class="more-videos-text">More Videos Coming Soon   .   .   .</div>
+                    <div class="more-videos-link">
+                        Visit My Channel <span class="arrow-icon">→</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="link-blocker-overlay" id="linkBlockerOverlay">
+        <div class="link-blocker-message">
+            External links are not allowed.
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <div class="nav-logo">Yuze Pan</div>
+        <nav class="nav-menu">
+            <a href="index.html#hero" class="nav-item">HOME</a>
+            <a href="index.html#profile" class="nav-item">PROFILE</a>
+            <a href="gallery.html" class="nav-item">GALLERY</a>
+            <a href="video.html" class="nav-item active">VIDEO</a>
+            <a href="contact.html" class="nav-item">CONTACT</a>
+        </nav>
+    </div>
+
+    <div class="player-bar continue-on-exit">
+        <div class="player-controls">
+            <button class="player-btn prev-btn" aria-label="上一首"></button>
+            <button class="player-btn play-btn" aria-label="播放/暂停"></button>
+            <button class="player-btn next-btn" aria-label="下一首"></button>
+        </div>
+        <div class="player-info">
+            <span class="track-name"></span>
+            <span class="track-time">0:00/0:00</span>
+        </div>
+    </div>
+
+    <script src="static/js/player.js"></script>
+    <script src="static/js/protection.js"></script>
+    <script src="static/js/video-protection.js"></script>
+
+    <script>
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载视频保护系统
+            initVideoProtection();
+            
+            // 其他初始化代码...
+        });
+        
+        // 移除重复的beforeunload事件监听
+        // window.addEventListener('beforeunload', function(e) {
+        //     e.preventDefault();
+        //     e.returnValue = '';
+        //     return '';
+        // });
+    </script>
+</body>
+</html> 

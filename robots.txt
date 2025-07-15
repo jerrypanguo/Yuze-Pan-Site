@@ -1,0 +1,50 @@
+# robots.txt for Yuze Pan's Official Website
+# 版权所有 © 2025 Yuze Pan. All Rights Reserved.
+# 本网站所有内容包括但不限于文字、图片、视频等均为Yuze Pan所有
+# 未经许可不得复制、修改或使用本网站内容
+
+
+User-agent: *
+Allow: /
+
+
+Allow: /static/
+Allow: /static/images/
+Allow: /static/images/gallery/
+Allow: /static/css/
+Allow: /static/js/
+Allow: /static/audio/
+Allow: /*.html$
+Allow: /*.htm$
+Allow: /*.js$
+Allow: /*.css$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.gif$
+Allow: /*.svg$
+Allow: /*.webp$
+Allow: /*.ico$
+Allow: /*.mp3$
+Allow: /*.mp4$
+Allow: /*.webm$
+Allow: /*.pdf$
+Allow: /*.txt$
+Allow: /*.xml$
+Allow: /*.json$
+
+
+Disallow:
+
+# SEO友好声明
+# 本网站针对搜索引擎优化,提供优质音乐、视频和古典吉他演奏内容
+# 内容定期更新,欢迎搜索引擎完整索引本站内容
+# 古典吉他 | 音乐演奏 | 国际比赛获奖者 | 青少年音乐家 | 音乐教育
+
+# 所有权声明
+# 本网站内容的所有权和版权归属于Yuze Pan
+# © 2025 Yuze Pan. All Rights Reserved.
+# 如有任何问题请联系: panyuzepan6@gmail.com
+
+# 在robots.txt中添加sitemap引用
+Sitemap: https://yuzeguitar.site/sitemap.xml

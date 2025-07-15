@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script>
+      (function() {
+        const now = new Date();
+        const hour = now.getHours();
+        const minute = now.getMinutes();
+        const isDayTime = (hour > 6 || (hour === 6 && minute >= 30)) && hour < 18;
+        const theme = isDayTime ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+        // console.log('Inline script set theme:', theme); // 调试用
+      })();
+    </script>
+    <title>Contact - Yuze Pan | Classical Guitarist</title>
+    <link href="static/css/main.css" rel="stylesheet">
+    <link href="static/css/protection.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="static/images/favicon.ico" type="image/x-icon">
+    <style>
+        /* 移除播放器栏样式覆盖,让 CSS 变量生效 */
+        /* .player-bar {
+            background: #121212 !important; 
+            backdrop-filter: none !important; 
+            -webkit-backdrop-filter: none !important; 
+        } */
+    </style>
+    <script src="static/js/theme-switcher.js" defer></script>
+</head>
+<body class="page-transition">
+    
+    <section class="contact-section">
+        <div class="contact-container">
+            <h1 class="contact-title">Contact</h1>
+            <p class="contact-text">For inquiries, please contact me at:</p>
+            <div class="contact-email">
+                <a href="mailto:yuzeguitar@gmail.com">yuzeguitar@gmail.com</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="nav-bar">
+        <div class="nav-logo">Yuze Pan</div>
+        <nav class="nav-menu">
+            <a href="index.html#hero" class="nav-item">HOME</a>
+            <a href="index.html#profile" class="nav-item">PROFILE</a>
+            <a href="gallery.html" class="nav-item">GALLERY</a>
+            <a href="video.html" class="nav-item">VIDEO</a>
+            <a href="contact.html" class="nav-item active">CONTACT</a>
+        </nav>
+    </div>
+
+    <div class="player-bar continue-on-exit">
+        <div class="player-controls">
+            <button class="player-btn prev-btn" aria-label="上一首"></button>
+            <button class="player-btn play-btn" aria-label="播放/暂停"></button>
+            <button class="player-btn next-btn" aria-label="下一首"></button>
+        </div>
+        <div class="player-info">
+            <span class="track-name"></span>
+            <span class="track-time">0:00/0:00</span>
+        </div>
+    </div>
+
+    <script src="static/js/player.js"></script>
+    <script src="static/js/protection.js"></script>
+</body>
+</html> 

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script>
+      (function() {
+        const now = new Date();
+        const hour = now.getHours();
+        const minute = now.getMinutes();
+        const isDayTime = (hour > 6 || (hour === 6 && minute >= 30)) && hour < 18;
+        const theme = isDayTime ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+        // console.log('Inline script set theme:', theme); // 调试用
+      })();
+    </script>
+    <title>Gallery - Yuze Pan | 古典吉他演奏家</title>
+    <link href="static/css/main.css" rel="stylesheet">
+    <link href="static/css/protection.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="static/images/favicon.ico" type="image/x-icon">
+    <script src="static/js/theme-switcher.js" defer></script>
+    <style>
+        /* 画廊特定样式 */
+        .gallery-section {
+            padding: 4rem 0 4rem;
+            background: var(--primary-color);
+            position: relative;
+        }
+        
+        .gallery-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            animation: fadeIn 1s ease;
+        }
+        
+        .gallery-title {
+            text-align: center;
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+            letter-spacing: 2px;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            aspect-ratio: 324.34/250; /* 横向长方形比例 */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: rgba(0, 0, 0, 0.2);
+            height: 250px;
+            user-select: none; /* 防止选择 */
+            -webkit-user-select: none;
+            -webkit-touch-callout: none; /* 防止iOS设备上的长按菜单 */
+            -webkit-user-drag: none; /* 防止拖拽 */
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.5s ease, opacity 0.3s ease;
+            opacity: 0;
+            pointer-events: none; /* 防止直接与图片交互 */
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-user-drag: none;
+        }
+        
+        .gallery-item.loaded img {
+            opacity: 1;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* 图片保护层 */
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+            pointer-events: auto; /* 确保点击事件仍然有效 */
+        }
+        
+        .gallery-item-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 1.5rem 1rem;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 100%);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform: translateY(20px);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            z-index: 2; /* 确保在保护层之上 */
+        }
+        
+        .gallery-item:hover .gallery-item-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .gallery-item-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            line-height: 1.4;
+        }
+
+        .gallery-item-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .gallery-item.loading:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--secondary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            transform: translate(-50%, -50%);
+        }
+        
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 900px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .gallery-title {
+                font-size: 2.5rem;
+                margin-bottom: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                justify-items: center; /* 确保网格子项居中 */
+            }
+            
+            .gallery-container {
+                padding: 0 1rem;
+            }
+            
+            .gallery-item {
+                width: 100%; /* 确保项目宽度100% */
+                max-width: 320px; /* 设置最大宽度以确保不会太宽 */
+                margin: 0 auto; /* 左右自动边距实现居中 */
+            }
+            
+            .gallery-item-title {
+                font-size: 1rem;
+            }
+            
+            .gallery-title {
+                font-size: 2rem;
+            }
+        }
+        
+        /* 播放器栏样式覆盖 - 已移除,由 main.css 控制 */
+    </style>
+</head>
+<body class="page-transition">
+    
+    <section id="hero" class="hero-section">
+        <img src="static/images/Home.jpg" alt="Yuze Pan - Classical Guitarist" class="hero-image">
+    </section>
+
+    <section class="gallery-section">
+        <div class="gallery-container">
+            <h1 class="gallery-title">Gallery</h1>
+
+            <div class="gallery-grid" id="gallery-grid">
+                
+            </div>
+        </div>
+    </section>
+
+    <div class="nav-bar">
+        <div class="nav-logo">Yuze Pan</div>
+        <nav class="nav-menu">
+            <a href="index.html#hero" class="nav-item">HOME</a>
+            <a href="index.html#profile" class="nav-item">PROFILE</a>
+            <a href="gallery.html" class="nav-item active">GALLERY</a>
+            <a href="video.html" class="nav-item">VIDEO</a>
+            <a href="contact.html" class="nav-item">CONTACT</a>
+        </nav>
+    </div>
+
+    <div class="player-bar continue-on-exit">
+        <div class="player-controls">
+            <button class="player-btn prev-btn" aria-label="上一首"></button>
+            <button class="player-btn play-btn" aria-label="播放/暂停"></button>
+            <button class="player-btn next-btn" aria-label="下一首"></button>
+        </div>
+        <div class="player-info">
+            <span class="track-name"></span>
+            <span class="track-time">0:00/0:00</span>
+        </div>
+    </div>
+
+    <script src="static/js/player.js"></script>
+    <script src="static/js/protection.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 所有图片数据
+            const galleryImages = [
+                {
+                    id: 1,
+                    src: 'static/images/gallery/Segovia International Guitar Competition Monheim,Germany.jpg',
+                    title: 'Segovia International Guitar Competition in Germany',
+                    description: 'Award ceremony with Professor Li Jiajiong'
+                },
+                {
+                    id: 2,
+                    src: 'static/images/gallery/Segovia International Guitar Competition Winners\' Concert.jpg',
+                    title: 'Segovia International Guitar Competition Winners\' Concert',
+                    description: 'Performance at the winners\' concert after the competition'
+                },
+                {
+                    id: 3,
+                    src: 'static/images/gallery/Photos of the "Juan Crisostomo de Arriaga" International Guitar Competition in Spain.jpg',
+                    title: '"Juan Crisostomo de Arriaga" International Guitar Competition in Spain',
+                    description: 'Award ceremony at the Spanish competition'
+                },
+                {
+                    id: 4,
+                    src: 'static/images/gallery/Concert at Hangzhou.jpg',
+                    title: 'Concert in Hangzhou',
+                    description: 'Classical guitar concert held in Hangzhou'
+                },
+                {
+                    id: 5,
+                    src: 'static/images/gallery/Hua Bin Opera House Future Stars Performance Photo.jpg',
+                    title: 'Future Stars Performance at Hua Bin Opera House',
+                    description: 'Performance at the Future Stars concert series in Beijing Hua Bin Opera House'
+                },
+                {
+                    id: 6,
+                    src: 'static/images/gallery/Hua Bin Opera House Future Stars Performance Group Photo.jpg',
+                    title: 'Future Stars Group Photo at Hua Bin Opera House',
+                    description: 'Group photo after the Future Stars concert series'
+                },
+                {
+                    id: 7,
+                    src: 'static/images/gallery/judicael_perroy_masterclass_changsha_hunan_china.jpg',
+                    title: 'Masterclass with Judicael Perroy',
+                    description: 'Participating in internationally renowned guitarist Judicael Perroy\'s masterclass in Changsha, Hunan'
+                },
+                {
+                    id: 8,
+                    src: 'static/images/gallery/photo_with_professor_judicael_perroy_changsha_hunan_china.JPG',
+                    title: 'With Professor Judicael Perroy',
+                    description: 'Photo with internationally renowned guitar master Judicael Perroy in Changsha, Hunan'
+                },
+                {
+                    id: 9,
+                    src: 'static/images/gallery/Masterclass by Professor Lorenzo Micheli, Central Conservatory of Music Middle School, Beijing.jpg',
+                    title: 'Masterclass with Professor Lorenzo Micheli',
+                    description: 'Receiving guidance from Professor Lorenzo Micheli at the Middle School Affiliated to the Central Conservatory of Music'
+                },
+                {
+                    id: 10,
+                    src: 'static/images/gallery/Performing "Genesis" at the Concert Hall of the Central Conservatory of Music Affiliated Middle School1 .JPG',
+                    title: 'Performing "Genesis" at Central Conservatory Concert Hall',
+                    description: 'Solo performance of "Genesis" at the Concert Hall of the Central Conservatory of Music Affiliated Middle School'
+                },
+                {
+                    id: 11,
+                    src: 'static/images/gallery/Performing "Genesis" at the Concert Hall of the Central Conservatory of Music Affiliated Middle School2.jpg',
+                    title: 'Performing "Genesis" - Concert Moment',
+                    description: 'Another moment from the "Genesis" performance at the Central Conservatory of Music Affiliated Middle School'
+                },
+                {
+                    id: 12,
+                    src: 'static/images/gallery/Photo with luthier Mo Guofang in Huzhou, China.jpg',
+                    title: 'With Luthier Mo Guofang in Huzhou',
+                    description: 'Meeting with renowned guitar maker Mo Guofang in Huzhou, China'
+                },
+                {
+                    id: 13,
+                    src: 'static/images/gallery/Our Quartet1.jpg',
+                    title: 'Our Quartet',
+                    description: 'Group photo with our guitar quartet members'
+                },
+                {
+                    id: 14,
+                    src: 'static/images/gallery/Our Quartet2.jpg',
+                    title: 'Quartet Group Photo',
+                    description: 'Another group photo with our guitar quartet'
+                },
+                {
+                    id: 15,
+                    src: 'static/images/gallery/Pictured with Teacher Guan Cang in Suzhou, China.JPG',
+                    title: 'With Teacher Guan Cang in Suzhou',
+                    description: 'Photo with esteemed guitar teacher Guan Cang in Suzhou, China'
+                }
+            ];
+            
+            // 获取DOM元素
+            const galleryGrid = document.getElementById('gallery-grid');
+            
+            // 渲染所有图片
+            function renderGallery() {
+                // 添加所有图片
+                galleryImages.forEach(image => {
+                    // 创建图片项
+                    const galleryItem = document.createElement('div');
+                    galleryItem.className = 'gallery-item loading';
+                    galleryItem.dataset.id = image.id;
+                    
+                    // 创建图片元素
+                    const img = document.createElement('img');
+                    img.src = image.src;
+                    img.alt = image.title;
+                    img.loading = 'lazy';
+                    img.draggable = false; // 防止拖拽
+                    
+                    // 图片加载处理
+                    img.onload = function() {
+                        galleryItem.classList.remove('loading');
+                        galleryItem.classList.add('loaded');
+                    };
+                    
+                    img.onerror = function() {
+                        galleryItem.classList.remove('loading');
+                        galleryItem.innerHTML = '<p style="padding: 2rem; text-align: center;">Image failed to load</p>';
+                    };
+                    
+                    // 创建悬停显示的叠加层
+                    const overlay = document.createElement('div');
+                    overlay.className = 'gallery-item-overlay';
+                    
+                    // 标题
+                    const title = document.createElement('h3');
+                    title.className = 'gallery-item-title';
+                    title.textContent = image.title;
+                    
+                    // 描述(如果有)
+                    if (image.description) {
+                        const description = document.createElement('p');
+                        description.className = 'gallery-item-description';
+                        description.textContent = image.description;
+                        overlay.appendChild(title);
+                        overlay.appendChild(description);
+                    } else {
+                        overlay.appendChild(title);
+                    }
+                    
+                    // 组装项目
+                    galleryItem.appendChild(img);
+                    galleryItem.appendChild(overlay);
+                    galleryGrid.appendChild(galleryItem);
+                });
+            }
+            
+            // 初始加载所有图片
+            renderGallery();
+            
+            // 禁用右键菜单
+            document.addEventListener('contextmenu', function(e) {
+                // 检查事件源是否为图片或图片容器
+                if (e.target.tagName === 'IMG' || e.target.classList.contains('gallery-item') || 
+                    e.target.closest('.gallery-item')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            
+            // 防止长按事件(移动端)
+            document.addEventListener('touchstart', function(e) {
+                if (e.target.tagName === 'IMG' || e.target.classList.contains('gallery-item') || 
+                    e.target.closest('.gallery-item')) {
+                    // 添加长按标志
+                    e.target.longPress = false;
+                    e.target.longPressTimer = setTimeout(function() {
+                        e.target.longPress = true;
+                    }, 500);
+                }
+            }, { passive: false });
+            
+            document.addEventListener('touchend', function(e) {
+                if (e.target.tagName === 'IMG' || e.target.classList.contains('gallery-item') || 
+                    e.target.closest('.gallery-item')) {
+                    clearTimeout(e.target.longPressTimer);
+                    if (e.target.longPress) {
+                        e.preventDefault();
+                        return false;
+                    }
+                }
+            }, { passive: false });
+            
+            document.addEventListener('touchmove', function(e) {
+                if (e.target.tagName === 'IMG' || e.target.classList.contains('gallery-item') || 
+                    e.target.closest('.gallery-item')) {
+                    clearTimeout(e.target.longPressTimer);
+                }
+            }, { passive: true });
+        });
+    </script>
+</body>
+</html> 

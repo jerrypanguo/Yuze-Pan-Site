@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script>
+      (function() {
+        const now = new Date();
+        const hour = now.getHours();
+        const minute = now.getMinutes();
+        const isDayTime = (hour > 6 || (hour === 6 && minute >= 30)) && hour < 18;
+        const theme = isDayTime ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+        // console.log('Inline script set theme:', theme); // 调试用
+      })();
+    </script>
+    <title>Yuze Pan | 古典吉他演奏家</title>
+    <link href="static/css/main.css" rel="stylesheet">
+    <link href="static/css/protection.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="static/images/favicon.ico" type="image/x-icon">
+    <style>
+        /* 移除播放器栏样式覆盖,让 CSS 变量生效 */
+        /* .player-bar {
+            background: #121212 !important; 
+            backdrop-filter: none !important; 
+            -webkit-backdrop-filter: none !important; 
+        } */
+    </style>
+    <script src="static/js/theme-switcher.js" defer></script>
+</head>
+<body class="page-transition">
+    
+    <section id="hero" class="hero-section">
+        <img src="static/images/Home.jpg" alt="Yuze Pan - Classical Guitarist" class="hero-image">
+    </section>
+
+    <section id="profile" class="profile-section">
+        <div class="profile-container">
+            <h1 class="profile-name">Yuze Pan</h1>
+            
+            <div class="profile-items">
+                <p class="profile-item">Born in Hangzhou in July 2011, began studying classical guitar with Professor Le Li in May 2018.</p>
+                
+                <p class="profile-item">Won first prize in the Children's Group at the Changsha International Guitar Festival Competition in July 2019.</p>
+                
+                <p class="profile-item">Admitted to the fourth grade of the Primary School Affiliated to the Central Conservatory of Music in September 2020 with the highest professional score, studying under Associate Professor Jiajiong Li.</p>
+                
+                <p class="profile-item">Enrolled in the Middle School Affiliated to the Central Conservatory of Music in September 2023 with the highest professional score.</p>
+                
+                <p class="profile-item">Won first prize in the Under-14 Youth Category at the 12th "Juan Crisostomo de Arriaga" International Guitar Competition in Spain in May 2024.</p>
+                
+                <p class="profile-item">Won first prize in the Under-14 Youth Category at the 13th "Andres Segovia" International Youth Guitar Competition in Germany in June 2024.</p>
+                
+                <p class="profile-item">Received the First-Class Award for Outstanding Professional Achievement at the Middle School Affiliated to the Central Conservatory of Music in November 2024.</p>
+            </div>
+            
+            <div class="profile-divider"><span></span></div>
+
+            <div class="social-links">
+                <a href="https://www.instagram.com/yuze_guitarist/" target="_blank" class="social-link" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                    </svg>
+                </a>
+                <a href="https://www.youtube.com/@jerry-yuze731" target="_blank" class="social-link" aria-label="YouTube">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="nav-bar">
+        <div class="nav-logo">Yuze Pan</div>
+        <nav class="nav-menu">
+            <a href="#hero" class="nav-item">HOME</a>
+            <a href="#profile" class="nav-item">PROFILE</a>
+            <a href="gallery.html" class="nav-item">GALLERY</a>
+            <a href="video.html" class="nav-item">VIDEO</a>
+            <a href="contact.html" class="nav-item">CONTACT</a>
+        </nav>
+    </div>
+
+    <div class="player-bar continue-on-exit">
+        <div class="player-controls">
+            <button class="player-btn prev-btn" aria-label="上一首"></button>
+            <button class="player-btn play-btn" aria-label="播放/暂停"></button>
+            <button class="player-btn next-btn" aria-label="下一首"></button>
+        </div>
+        <div class="player-info">
+            <span class="track-name"></span>
+            <span class="track-time">0:00/0:00</span>
+        </div>
+    </div>
+
+    <script src="static/js/player.js"></script>
+    <script src="static/js/protection.js"></script>
+    <script>
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // 激活当前导航项
+        const navItems = document.querySelectorAll('.nav-item');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            const sections = document.querySelectorAll('section');
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href').includes(current)) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
